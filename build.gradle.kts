@@ -17,6 +17,7 @@ dependencies {
     implementation("org.liquibase:liquibase-core")
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 }
 
 tasks.test {
