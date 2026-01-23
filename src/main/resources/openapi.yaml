@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: Reminder API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /profile:
+    put:
+      tags:
+        - profile
+      operationId: updateProfile
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequestDto'
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileDto'
+    get:
+      tags:
+        - profile
+      operationId: getProfile
+      summary: Get user profile
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileDto'
+components:
+  schemas:
+    UserProfileDto:
+      type: object
+      required:
+        - userId
+      properties:
+        userId:
+          type: string
+        email:
+          type: string
+          format: email
+          example: "string@mail.ru"
+        telegram:
+          type: string
+          pattern: '^@\w+$'
+          example: "@username"
+    UpdateProfileRequestDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "string@mail.ru"
+        telegram:
+          type: string
+          pattern: '^@\w+$'
+          example: "@username"
