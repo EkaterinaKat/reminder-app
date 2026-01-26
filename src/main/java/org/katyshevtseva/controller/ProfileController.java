@@ -5,10 +5,9 @@ import com.katyshevtseva.dto.UpdateProfileRequestDto;
 import com.katyshevtseva.dto.UserProfileDto;
 import org.katyshevtseva.service.ProfileService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.katyshevtseva.util.SecurityUtil.getUserId;
 
 @RestController
 public class ProfileController implements ProfileApi {
@@ -30,11 +29,5 @@ public class ProfileController implements ProfileApi {
     @Override
     public ResponseEntity<UserProfileDto> getProfile() {
         return ResponseEntity.ok(profileService.getProfile(getUserId()));
-    }
-
-    private String getUserId() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = (Jwt) auth.getPrincipal();
-        return jwt.getSubject();
     }
 }
