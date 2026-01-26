@@ -30,4 +30,10 @@ public class ProfileController implements ProfileApi {
     public ResponseEntity<UserProfileDto> getProfile() {
         return ResponseEntity.ok(profileService.getProfile(getUserId()));
     }
+
+    @Override
+    public ResponseEntity<Void> deleteProfile() {
+        profileService.deleteProfile(getUserId());
+        return ResponseEntity.ok().build();
+    }
 }

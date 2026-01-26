@@ -33,6 +33,10 @@ public class ProfileService {
         return mapper.toDto(getOrCreateProfile(userId));
     }
 
+    public void deleteProfile(String userId) {
+        repository.deleteById(userId);
+    }
+
     @Transactional(readOnly = true)
     private UserProfile getOrCreateProfile(String userId) {
         Optional<UserProfile> existing = repository.findById(userId);

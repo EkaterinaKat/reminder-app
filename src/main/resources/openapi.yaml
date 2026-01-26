@@ -36,6 +36,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfileDto'
+    delete:
+      tags:
+        - profile
+      operationId: deleteProfile
+      summary: Delete user profile
+      responses:
+        '200':
+          description: Deleted
+
   /reminder:
     post:
       tags:
