@@ -6,6 +6,7 @@ import com.katyshevtseva.dto.ReminderDto;
 import com.katyshevtseva.dto.ReminderRequestDto;
 import org.katyshevtseva.domain.ReminderSortType;
 import org.katyshevtseva.service.ReminderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,9 @@ public class ReminderController implements ReminderApi {
 
     @Override
     public ResponseEntity<ReminderDto> createReminder(ReminderRequestDto reminderRequestDto) {
-        return ResponseEntity.ok(service.createReminder(getUserId(), reminderRequestDto));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(service.createReminder(getUserId(), reminderRequestDto));
     }
 
     @Override

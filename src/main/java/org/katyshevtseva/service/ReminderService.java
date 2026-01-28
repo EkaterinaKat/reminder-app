@@ -4,36 +4,99 @@ import com.katyshevtseva.dto.PageReminderDto;
 import com.katyshevtseva.dto.ReminderDto;
 import com.katyshevtseva.dto.ReminderRequestDto;
 import org.katyshevtseva.domain.ReminderSortType;
+import org.katyshevtseva.entity.Reminder;
+import org.katyshevtseva.mapper.ReminderMapper;
+import org.katyshevtseva.repository.ReminderRepository;
+import org.katyshevtseva.repository.UserProfileRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReminderService {
 
+    private final ReminderRepository reminderRepository;
+    private final ReminderMapper mapper;
+    private final UserProfileRepository profileRepository;
+
+    public ReminderService(
+            ReminderRepository reminderRepository,
+            ReminderMapper mapper,
+            UserProfileRepository profileRepository
+    ) {
+        this.reminderRepository = reminderRepository;
+        this.mapper = mapper;
+        this.profileRepository = profileRepository;
+    }
+
     public ReminderDto createReminder(String userId, ReminderRequestDto requestDto) {
-        return new ReminderDto(8L, requestDto.getTitle(), requestDto.getRemind());
+        Reminder reminder = mapper.toEntity(requestDto);
+        reminder.setUserProfile(profileRepository.getOrCreate(userId));
+        return mapper.toDto(reminderRepository.save(reminder));
     }
 
     public void deleteReminder(String userId, Long reminderId) {
-
+        validateOwnershipAndGetReminder(userId, reminderId);
+        reminderRepository.deleteById(reminderId);
     }
 
     public List<ReminderDto> getSortedReminders(String userId, ReminderSortType sortType) {
-        return new ArrayList<>();
+        List<Reminder> reminders = null;
+        switch (sortType) {
+            case DATE -> reminders = reminderRepository.findByUserProfileIdOrderByRemind(userId);
+            case TIME -> reminders = reminderRepository.findByUserIdOrderByTime(userId);
+            case TITLE -> reminders = reminderRepository.findByUserProfileIdOrderByTitle(userId);
+        }
+
+        return reminders.stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
-    public List<ReminderDto> getFilteredReminders(String userId, LocalDate date, String time) {
-        return new ArrayList<>();
+    public List<ReminderDto> getFilteredReminders(String userId, LocalDate date, String timeString) {
+        LocalTime time = (timeString != null) ? LocalTime.parse(timeString) : null;
+        List<Reminder> reminders = reminderRepository.findFilteredReminders(userId, date, time);
+        return reminders.stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     public PageReminderDto getReminderPage(String userId, Integer page, Integer size) {
-        return new PageReminderDto();
+        Pageable pageable = PageRequest.of(page, size > 0 ? size : 10);
+        Page<Reminder> reminderPage = reminderRepository.findByUserProfileId(userId, pageable);
+        return toPageReminderDto(reminderPage);
     }
 
-    public ReminderDto updateReminder(String userId, Long id, ReminderRequestDto reminderRequestDto) {
-        return new ReminderDto();
+    public ReminderDto updateReminder(String userId, Long reminderId, ReminderRequestDto reminderRequestDto) {
+        Reminder reminder = validateOwnershipAndGetReminder(userId, reminderId);
+        mapper.updateReminderFromDto(reminderRequestDto, reminder);
+        return mapper.toDto(reminderRepository.save(reminder));
+    }
+
+    private Reminder validateOwnershipAndGetReminder(String userId, Long reminderId) {
+        Reminder reminder = reminderRepository.findById(reminderId).orElseThrow(() ->
+                new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        String.format("Reminder with id=%d not found", reminderId)
+                )
+        );
+        if (!reminder.getUserProfile().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Reminder does not belong to the user");
+        }
+        return reminder;
+    }
+
+    private PageReminderDto toPageReminderDto(Page<Reminder> page) {
+        PageReminderDto pageDto = new PageReminderDto();
+        pageDto.setContent(page.getContent().stream().map(mapper::toDto).collect(Collectors.toList()));
+        pageDto.setTotalElements(page.getTotalElements());
+        pageDto.setTotalPages(page.getTotalPages());
+        pageDto.setSize(page.getSize());
+        pageDto.setPage(page.getNumber());
+        return pageDto;
     }
 }

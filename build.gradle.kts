@@ -33,6 +33,8 @@ openApiGenerate {
     outputDir.set("$buildDir/generated/openapi")
     modelPackage.set("com.katyshevtseva.dto")
     apiPackage.set("com.katyshevtseva.api")
+    typeMappings.put("OffsetDateTime", "LocalDateTime")
+    importMappings.put("java.time.OffsetDateTime", "java.time.LocalDateTime")
     configOptions.set(
         mapOf(
             "useJakartaEe" to "true",

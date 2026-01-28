@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/001-initial.yaml
   - include:
       file: db/changelog/002-create-profile-table.yaml
+  - include:
+      file: db/changelog/003-add-profile-fk-to-reminder.yaml
