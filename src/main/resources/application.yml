@@ -3,6 +3,10 @@ server:
   error:
     include-message: always
 
+reminder:
+  send:
+    interval-ms: 60000
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/reminder_app_db
@@ -21,3 +25,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://accounts.google.com
+  task:
+    scheduling:
+      pool:
+        size: 5
+      thread-name-prefix: "remind-task-"
