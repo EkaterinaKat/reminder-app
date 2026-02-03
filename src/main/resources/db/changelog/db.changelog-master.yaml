@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/003-add-profile-fk-to-reminder.yaml
   - include:
       file: db/changelog/004-add-reminder-status.yaml
+  - include:
+      file: db/changelog/005-user-telegram-info.yaml
