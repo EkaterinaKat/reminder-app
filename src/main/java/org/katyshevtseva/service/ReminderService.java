@@ -3,8 +3,9 @@ package org.katyshevtseva.service;
 import com.katyshevtseva.dto.PageReminderDto;
 import com.katyshevtseva.dto.ReminderDto;
 import com.katyshevtseva.dto.ReminderRequestDto;
+import org.katyshevtseva.domain.ReminderEmailStatus;
 import org.katyshevtseva.domain.ReminderSortType;
-import org.katyshevtseva.domain.ReminderStatus;
+import org.katyshevtseva.domain.ReminderTelegramStatus;
 import org.katyshevtseva.entity.Reminder;
 import org.katyshevtseva.mapper.ReminderMapper;
 import org.katyshevtseva.repository.ReminderRepository;
@@ -41,7 +42,8 @@ public class ReminderService {
     public ReminderDto createReminder(String userId, ReminderRequestDto requestDto) {
         Reminder reminder = mapper.toEntity(requestDto);
         reminder.setUserProfile(profileRepository.getOrCreate(userId));
-        reminder.setStatus(ReminderStatus.NOT_SENT);
+        reminder.setTelegramStatus(ReminderTelegramStatus.NOT_SENT);
+        reminder.setEmailStatus(ReminderEmailStatus.NOT_SENT);
         return mapper.toDto(reminderRepository.save(reminder));
     }
 

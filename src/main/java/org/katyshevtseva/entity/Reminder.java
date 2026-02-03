@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.katyshevtseva.domain.ReminderStatus;
+import org.katyshevtseva.domain.ReminderEmailStatus;
+import org.katyshevtseva.domain.ReminderTelegramStatus;
 
 import java.time.LocalDateTime;
 
@@ -32,5 +33,8 @@ public class Reminder {
     private UserProfile userProfile;
 
     @Enumerated(EnumType.STRING)
-    private ReminderStatus status;
+    private ReminderTelegramStatus telegramStatus;
+
+    @Enumerated(EnumType.STRING)
+    private ReminderEmailStatus emailStatus;
 }
