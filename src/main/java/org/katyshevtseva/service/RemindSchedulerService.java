@@ -9,7 +9,6 @@ import org.katyshevtseva.entity.Reminder;
 import org.katyshevtseva.entity.UserTelegramInfo;
 import org.katyshevtseva.repository.ReminderRepository;
 import org.katyshevtseva.repository.UserTelegramInfoRepository;
-import org.katyshevtseva.util.MessageUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.katyshevtseva.util.MessageUtil.formTelegramMessage;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class RemindSchedulerService {
     private final ReminderTelegramBot telegramBot;
     private final ReminderRepository reminderRepository;
     private final UserTelegramInfoRepository telegramInfoRepository;
+    private final EmailService emailService;
 
     @Async
     @Transactional
@@ -75,15 +77,31 @@ public class RemindSchedulerService {
         UserTelegramInfo info = infoOptional.get();
 
         try {
-            telegramBot.sendMessage(info.getChatId(), MessageUtil.formTelegramMessage(reminder));
+            telegramBot.sendMessage(info.getChatId(), formTelegramMessage(reminder));
             return ReminderTelegramStatus.SENT;
         } catch (TelegramApiException e) {
-            log.error("Error sending message to user {}: ", info.getUserName(), e);
+            log.error("Error sending telegram message to user {}: ", info.getUserName(), e);
             return ReminderTelegramStatus.ERROR;
         }
     }
 
     private ReminderEmailStatus emailSend(Reminder reminder) {
-        return ReminderEmailStatus.NOT_SENT;
+        String emailAddress = reminder.getUserProfile().getEmail();
+
+        if (emailAddress == null) {
+            return ReminderEmailStatus.EMAIL_NOT_SPECIFIED;
+        }
+
+        try {
+            emailService.sendEmail(
+                    emailAddress,
+                    reminder.getTitle(),
+                    formTelegramMessage(reminder)
+            );
+            return ReminderEmailStatus.SENT;
+        } catch (Exception e) {
+            log.error("Error sending email to {}: ", emailAddress, e);
+            return ReminderEmailStatus.ERROR;
+        }
     }
 }

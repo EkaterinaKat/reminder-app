@@ -36,3 +36,17 @@ spring:
         size: 5
     scheduling:
       thread-name-prefix: "remind-task-"
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: reminder1417@gmail.com
+    password: gmmx upyz ffxz hmkf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
