@@ -23,7 +23,10 @@ public class ReminderTelegramBot extends TelegramLongPollingBot {
         return botUsername;
     }
 
-    public ReminderTelegramBot(@Value("${telegram.bot.token}") String token, TelegramService telegramService) {
+    public ReminderTelegramBot(
+            @Value("${telegram.bot.token}") String token,
+            TelegramService telegramService
+    ) {
         super(token);
         this.telegramService = telegramService;
     }
@@ -42,7 +45,7 @@ public class ReminderTelegramBot extends TelegramLongPollingBot {
             } else {
                 savedSuccessfully = saveUserNameAndChatId(username, chatId);
             }
-            sendResponse(username, chatId, savedSuccessfully);
+            sendStartResponse(username, chatId, savedSuccessfully);
         }
     }
 
@@ -58,7 +61,7 @@ public class ReminderTelegramBot extends TelegramLongPollingBot {
         return savedSuccessfully;
     }
 
-    private void sendResponse(String username, Long chatId, boolean savedSuccessfully) {
+    private void sendStartResponse(String username, Long chatId, boolean savedSuccessfully) {
         String text;
         if (savedSuccessfully) {
             text = String.format("Добро пожаловать %s! Ваши напоминания будут приходить в этот чат.", username);
@@ -66,15 +69,19 @@ public class ReminderTelegramBot extends TelegramLongPollingBot {
             text = "Произошла ошибка при запуске бота";
         }
 
-        SendMessage response = SendMessage.builder()
+        sendMessage(chatId, text);
+    }
+
+    public void sendMessage(Long chatId, String text) {
+        SendMessage message = SendMessage.builder()
                 .chatId(chatId)
                 .text(text)
                 .build();
 
         try {
-            execute(response);
+            execute(message);
         } catch (TelegramApiException e) {
-            log.error("Error sending response to user: ", e);
+            log.error("Error sending response to user with chatId = {}: ", chatId, e);
         }
     }
 
