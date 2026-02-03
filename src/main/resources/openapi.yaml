@@ -202,8 +202,7 @@ components:
           example: "string@mail.ru"
         telegram:
           type: string
-          pattern: '^@\w+$'
-          example: "@username"
+          example: "username"
     UpdateProfileRequestDto:
       type: object
       properties:
@@ -213,8 +212,7 @@ components:
           example: "string@mail.ru"
         telegram:
           type: string
-          pattern: '^@\w+$'
-          example: "@username"
+          example: "username"
     ReminderRequestDto:
       type: object
       required:
