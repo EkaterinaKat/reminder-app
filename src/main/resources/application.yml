@@ -7,6 +7,11 @@ reminder:
   send:
     interval-ms: 60000
 
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN}
+    username: reminder1417_bot
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/reminder_app_db

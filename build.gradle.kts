@@ -25,6 +25,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.34")
     implementation("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+    implementation("org.telegram:telegrambots-spring-boot-starter:6.9.0")
 }
 
 openApiGenerate {
