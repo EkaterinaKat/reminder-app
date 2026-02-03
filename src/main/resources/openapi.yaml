@@ -247,6 +247,8 @@ components:
           type: string
           format: date-time
           example: "2026-01-25T16:50:00Z"
+        status:
+          type: string
     PageReminderDto:
       type: object
       properties:

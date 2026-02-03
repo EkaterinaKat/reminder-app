@@ -4,6 +4,7 @@ import com.katyshevtseva.dto.PageReminderDto;
 import com.katyshevtseva.dto.ReminderDto;
 import com.katyshevtseva.dto.ReminderRequestDto;
 import org.katyshevtseva.domain.ReminderSortType;
+import org.katyshevtseva.domain.ReminderStatus;
 import org.katyshevtseva.entity.Reminder;
 import org.katyshevtseva.mapper.ReminderMapper;
 import org.katyshevtseva.repository.ReminderRepository;
@@ -40,6 +41,7 @@ public class ReminderService {
     public ReminderDto createReminder(String userId, ReminderRequestDto requestDto) {
         Reminder reminder = mapper.toEntity(requestDto);
         reminder.setUserProfile(profileRepository.getOrCreate(userId));
+        reminder.setStatus(ReminderStatus.NOT_SENT);
         return mapper.toDto(reminderRepository.save(reminder));
     }
 

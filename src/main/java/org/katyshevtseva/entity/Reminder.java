@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.katyshevtseva.domain.ReminderStatus;
 
 import java.time.LocalDateTime;
 
@@ -29,4 +30,7 @@ public class Reminder {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserProfile userProfile;
+
+    @Enumerated(EnumType.STRING)
+    private ReminderStatus status;
 }
