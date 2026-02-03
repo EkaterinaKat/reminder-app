@@ -11,7 +11,7 @@ public class RemindScheduler {
 
     private final RemindSchedulerService service;
 
-    @Scheduled(fixedRateString = "${reminder.send.interval-ms:60000}")
+    @Scheduled(fixedRateString = "${reminder.send.interval-ms}")
     public void execute() {
         service.sendReminds();
     }

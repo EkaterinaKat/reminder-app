@@ -69,20 +69,20 @@ public class ReminderTelegramBot extends TelegramLongPollingBot {
             text = "Произошла ошибка при запуске бота";
         }
 
-        sendMessage(chatId, text);
+        try {
+            sendMessage(chatId, text);
+        } catch (TelegramApiException e) {
+            log.error("Error sending response to user with chatId = {}: ", chatId, e);
+        }
     }
 
-    public void sendMessage(Long chatId, String text) {
+    public void sendMessage(Long chatId, String text) throws TelegramApiException {
         SendMessage message = SendMessage.builder()
                 .chatId(chatId)
                 .text(text)
                 .build();
 
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            log.error("Error sending response to user with chatId = {}: ", chatId, e);
-        }
+        execute(message);
     }
 
     private boolean isStartMessage(Update update) {

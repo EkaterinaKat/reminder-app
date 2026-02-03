@@ -31,7 +31,8 @@ spring:
         jwt:
           issuer-uri: https://accounts.google.com
   task:
-    scheduling:
+    execution:
       pool:
         size: 5
+    scheduling:
       thread-name-prefix: "remind-task-"
