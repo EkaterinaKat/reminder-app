@@ -39,12 +39,6 @@ public class RemindSchedulerService {
                 ReminderEmailStatus.NOT_SENT
         );
 
-        try {
-            Thread.sleep(25000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         for (Reminder reminder : reminders) {
 
             if (reminder.getTelegramStatus() == ReminderTelegramStatus.NOT_SENT) {
