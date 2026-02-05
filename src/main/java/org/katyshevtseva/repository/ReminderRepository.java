@@ -20,8 +20,6 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
 
     Page<Reminder> findByUserProfileId(String userId, Pageable pageable);
 
-    List<Reminder> findByUserProfileId(String userId);
-
     List<Reminder> findByUserProfileIdOrderByRemind(@Param("userId") String userId);
 
     @Query(value = "SELECT * FROM reminder r WHERE r.user_id = :userId " +
@@ -29,15 +27,6 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     List<Reminder> findByUserIdOrderByTime(@Param("userId") String userId);
 
     List<Reminder> findByUserProfileIdOrderByTitle(String userId);
-
-    List<Reminder> findByUserProfileIdAndRemind(String userId, LocalDateTime remind);
-
-    @Query(value = "SELECT * FROM reminder r WHERE CAST(r.remind AS time) = :time", nativeQuery = true)
-    List<Reminder> findByUserProfileIdAndRemindOnlyTime(@Param("time") LocalTime time);
-
-    @Query(value = "SELECT * FROM reminder r WHERE DATE(r.remind) = :date", nativeQuery = true)
-    List<Reminder> findByUserProfileIdAndRemindOnlyDate(@Param("date") LocalDate date);
-
 
     @Query(value = "SELECT * FROM reminder r WHERE r.user_id = :userId " +
             "AND (CAST(:date AS date) IS NULL OR DATE(r.remind) = :date) "

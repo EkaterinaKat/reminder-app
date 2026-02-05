@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.katyshevtseva.util.MessageUtil.formTelegramMessage;
+import static org.katyshevtseva.util.MessageUtil.formMessage;
 
 @Slf4j
 @Service
@@ -71,7 +71,7 @@ public class RemindSchedulerService {
         UserTelegramInfo info = infoOptional.get();
 
         try {
-            telegramBot.sendMessage(info.getChatId(), formTelegramMessage(reminder));
+            telegramBot.sendMessage(info.getChatId(), formMessage(reminder));
             return ReminderTelegramStatus.SENT;
         } catch (TelegramApiException e) {
             log.error("Error sending telegram message to user {}: ", info.getUserName(), e);
@@ -90,7 +90,7 @@ public class RemindSchedulerService {
             emailService.sendEmail(
                     emailAddress,
                     reminder.getTitle(),
-                    formTelegramMessage(reminder)
+                    formMessage(reminder)
             );
             return ReminderEmailStatus.SENT;
         } catch (Exception e) {

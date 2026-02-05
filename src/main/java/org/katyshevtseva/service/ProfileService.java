@@ -2,6 +2,7 @@ package org.katyshevtseva.service;
 
 import com.katyshevtseva.dto.UpdateProfileRequestDto;
 import com.katyshevtseva.dto.UserProfileDto;
+import lombok.RequiredArgsConstructor;
 import org.katyshevtseva.entity.UserProfile;
 import org.katyshevtseva.mapper.UserProfileMapper;
 import org.katyshevtseva.repository.UserProfileRepository;
@@ -11,26 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProfileService {
 
     private final UserProfileRepository repository;
     private final UserProfileMapper mapper;
 
-    public ProfileService(UserProfileRepository repository, UserProfileMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
-
     @Transactional
     public UserProfileDto updateProfile(String userId, UpdateProfileRequestDto requestDto) {
-        UserProfile profile = getOrCreateProfile(userId);
+        UserProfile profile = getOrCreateProfileWithoutSaving(userId);
         profile.setEmail(requestDto.getEmail());
         profile.setTelegram(requestDto.getTelegram());
         return mapper.toDto(repository.save(profile));
     }
 
     public UserProfileDto getProfile(String userId) {
-        return mapper.toDto(getOrCreateProfile(userId));
+        return mapper.toDto(getOrCreateProfileWithoutSaving(userId));
     }
 
     public void deleteProfile(String userId) {
@@ -38,7 +35,7 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    private UserProfile getOrCreateProfile(String userId) {
+    private UserProfile getOrCreateProfileWithoutSaving(String userId) {
         Optional<UserProfile> existing = repository.findById(userId);
         if (existing.isPresent()) {
             return existing.get();

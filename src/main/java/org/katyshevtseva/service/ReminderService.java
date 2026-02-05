@@ -3,6 +3,7 @@ package org.katyshevtseva.service;
 import com.katyshevtseva.dto.PageReminderDto;
 import com.katyshevtseva.dto.ReminderDto;
 import com.katyshevtseva.dto.ReminderRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.katyshevtseva.domain.ReminderEmailStatus;
 import org.katyshevtseva.domain.ReminderSortType;
 import org.katyshevtseva.domain.ReminderTelegramStatus;
@@ -23,21 +24,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReminderService {
 
     private final ReminderRepository reminderRepository;
     private final ReminderMapper mapper;
     private final UserProfileRepository profileRepository;
-
-    public ReminderService(
-            ReminderRepository reminderRepository,
-            ReminderMapper mapper,
-            UserProfileRepository profileRepository
-    ) {
-        this.reminderRepository = reminderRepository;
-        this.mapper = mapper;
-        this.profileRepository = profileRepository;
-    }
 
     public ReminderDto createReminder(String userId, ReminderRequestDto requestDto) {
         Reminder reminder = mapper.toEntity(requestDto);
