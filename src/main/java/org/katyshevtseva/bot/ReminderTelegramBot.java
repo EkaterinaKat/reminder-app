@@ -18,6 +18,12 @@ public class ReminderTelegramBot extends TelegramLongPollingBot {
     @Value("${telegram.bot.username}")
     private String botUsername;
 
+    @Value("${message.telegram.welcome}")
+    private String welcomeMessage;
+
+    @Value("${message.telegram.error}")
+    private String errorMessage;
+
     @Override
     public String getBotUsername() {
         return botUsername;
@@ -64,9 +70,9 @@ public class ReminderTelegramBot extends TelegramLongPollingBot {
     private void sendStartResponse(String username, Long chatId, boolean savedSuccessfully) {
         String text;
         if (savedSuccessfully) {
-            text = String.format("Добро пожаловать %s! Ваши напоминания будут приходить в этот чат.", username);
+            text = String.format(welcomeMessage, username);
         } else {
-            text = "Произошла ошибка при запуске бота";
+            text = errorMessage;
         }
 
         try {

@@ -50,3 +50,8 @@ spring:
           connectiontimeout: 5000
           timeout: 3000
           writetimeout: 5000
+
+message:
+  telegram:
+    welcome: Добро пожаловать %s! Ваши напоминания будут приходить в этот чат.
+    error: Произошла ошибка при запуске бота.
