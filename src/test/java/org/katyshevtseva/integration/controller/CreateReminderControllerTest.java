@@ -6,9 +6,7 @@ import org.katyshevtseva.domain.ReminderEmailStatus;
 import org.katyshevtseva.domain.ReminderTelegramStatus;
 import org.katyshevtseva.entity.Reminder;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,21 +14,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ReminderCreateControllerTest extends BaseReminderControllerTest {
+public class CreateReminderControllerTest extends BaseReminderControllerTest {
 
-    private final String URL_TEMPLATE = "/reminder";
-    private final String TITLE = "Reminder title";
     private final String DESCRIPTION = "Reminder description";
-    private final LocalDateTime DATE_TIME = LocalDateTime.now().withNano(0);
     private final String NOT_SENT_STATUS = "NOT_SENT";
-    private final String BLANK_STRING = "   ";
 
     @Test
     void shouldCreateReminderAndReturnFullDto() throws Exception {
         ReminderRequestDto dto = new ReminderRequestDto(TITLE, DATE_TIME);
         dto.setDescription(DESCRIPTION);
 
-        postReminderWithUser(dto)
+        createReminderWithUser(dto)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.title").value(TITLE))
@@ -51,10 +45,10 @@ public class ReminderCreateControllerTest extends BaseReminderControllerTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedWithoutJwt() throws Exception {
+    void shouldReturnUnauthorizedWithoutUser() throws Exception {
         ReminderRequestDto dto = new ReminderRequestDto(TITLE, DATE_TIME);
 
-        mockMvc.perform(post(URL_TEMPLATE)
+        mockMvc.perform(post(CREATE_REMINDER_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized());
@@ -64,32 +58,24 @@ public class ReminderCreateControllerTest extends BaseReminderControllerTest {
     void shouldCreateReminderWithoutDescription() throws Exception {
         var dto = new ReminderRequestDto(TITLE, DATE_TIME);
 
-        postReminderWithUser(dto).andExpect(status().isCreated());
+        createReminderWithUser(dto).andExpect(status().isCreated());
     }
 
     @Test
     void shouldReturn400ForNullTitle() throws Exception {
         var dto = new ReminderRequestDto(null, DATE_TIME);
-        postReminderWithUser(dto).andExpect(status().isBadRequest());
+        createReminderWithUser(dto).andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldReturn400ForBlankTitle() throws Exception {
         var dto = new ReminderRequestDto(BLANK_STRING, DATE_TIME);
-        postReminderWithUser(dto).andExpect(status().isBadRequest());
+        createReminderWithUser(dto).andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldReturn400ForBlankRemind() throws Exception {
         var dto = new ReminderRequestDto(TITLE, null);
-        postReminderWithUser(dto).andExpect(status().isBadRequest());
+        createReminderWithUser(dto).andExpect(status().isBadRequest());
     }
-
-    private ResultActions postReminderWithUser(ReminderRequestDto dto) throws Exception {
-        return mockMvc.perform(post(URL_TEMPLATE)
-                .with(user())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)));
-    }
-
 }
