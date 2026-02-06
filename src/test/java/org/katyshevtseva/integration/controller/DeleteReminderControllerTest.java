@@ -1,6 +1,5 @@
 package org.katyshevtseva.integration.controller;
 
-import com.katyshevtseva.dto.ReminderRequestDto;
 import org.junit.jupiter.api.Test;
 import org.katyshevtseva.entity.Reminder;
 
@@ -16,7 +15,7 @@ public class DeleteReminderControllerTest extends BaseReminderControllerTest {
     void shouldDeleteSavedReminder() throws Exception {
         long idOfCreatedReminder = createReminderAndGetId();
 
-        mockMvc.perform(delete(CREATE_REMINDER_URL)
+        mockMvc.perform(delete(DELETE_REMINDER_URL)
                         .with(user())
                         .param(ID_PARAM, String.valueOf(idOfCreatedReminder)))
                 .andExpect(status().isOk());
@@ -29,28 +28,16 @@ public class DeleteReminderControllerTest extends BaseReminderControllerTest {
     void shouldReturnUnauthorizedWithoutUser() throws Exception {
         long idOfCreatedReminder = createReminderAndGetId();
 
-        mockMvc.perform(delete(CREATE_REMINDER_URL)
-                        .with(user())
+        mockMvc.perform(delete(DELETE_REMINDER_URL)
                         .param(ID_PARAM, String.valueOf(idOfCreatedReminder)))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     void shouldReturn400ForBlankId() throws Exception {
-        mockMvc.perform(delete(CREATE_REMINDER_URL)
+        mockMvc.perform(delete(DELETE_REMINDER_URL)
                         .with(user())
                         .param(ID_PARAM, BLANK_STRING))
                 .andExpect(status().isBadRequest());
-    }
-
-    private long createReminderAndGetId() throws Exception {
-        ReminderRequestDto dto = new ReminderRequestDto(TITLE, DATE_TIME);
-        createReminderWithUser(dto);
-
-        List<Reminder> remindersAfterCreation = reminderRepository.findAll();
-        assertThat(remindersAfterCreation).hasSize(1);
-        Reminder saved = remindersAfterCreation.get(0);
-
-        return saved.getId();
     }
 }

@@ -16,9 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CreateReminderControllerTest extends BaseReminderControllerTest {
 
-    private final String DESCRIPTION = "Reminder description";
-    private final String NOT_SENT_STATUS = "NOT_SENT";
-
     @Test
     void shouldCreateReminderAndReturnFullDto() throws Exception {
         ReminderRequestDto dto = new ReminderRequestDto(TITLE, DATE_TIME);
