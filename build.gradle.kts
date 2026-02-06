@@ -29,6 +29,9 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
     implementation("org.telegram:telegrambots-spring-boot-starter:6.9.0")
     implementation("org.springframework.boot:spring-boot-starter-mail")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("com.h2database:h2")
 }
 
 openApiGenerate {

@@ -32,6 +32,7 @@ public class ReminderService {
     private final UserProfileRepository profileRepository;
 
     public ReminderDto createReminder(String userId, ReminderRequestDto requestDto) {
+        validateTitle(requestDto.getTitle());
         Reminder reminder = mapper.toEntity(requestDto);
         reminder.setUserProfile(profileRepository.getOrCreate(userId));
         reminder.setTelegramStatus(ReminderTelegramStatus.NOT_SENT);
@@ -68,6 +69,7 @@ public class ReminderService {
     }
 
     public ReminderDto updateReminder(String userId, Long reminderId, ReminderRequestDto reminderRequestDto) {
+        validateTitle(reminderRequestDto.getTitle());
         Reminder reminder = validateOwnershipAndGetReminder(userId, reminderId);
         mapper.updateReminderFromDto(reminderRequestDto, reminder);
         return mapper.toDto(reminderRepository.save(reminder));
@@ -94,5 +96,11 @@ public class ReminderService {
         pageDto.setSize(page.getSize());
         pageDto.setPage(page.getNumber());
         return pageDto;
+    }
+
+    private void validateTitle(String title) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Title cannot be blank");
+        }
     }
 }
