@@ -6,6 +6,7 @@ import org.katyshevtseva.domain.ReminderEmailStatus;
 import org.katyshevtseva.domain.ReminderTelegramStatus;
 import org.katyshevtseva.entity.Reminder;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
@@ -74,5 +75,12 @@ public class CreateReminderControllerTest extends BaseReminderControllerTest {
     void shouldReturn400ForBlankRemind() throws Exception {
         var dto = new ReminderRequestDto(TITLE, null);
         createReminderWithUser(dto).andExpect(status().isBadRequest());
+    }
+
+    private ResultActions createReminderWithUser(ReminderRequestDto dto) throws Exception {
+        return mockMvc.perform(post(CREATE_REMINDER_URL)
+                .with(user())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)));
     }
 }
