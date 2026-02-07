@@ -14,6 +14,7 @@ public class GetPageReminderControllerTest extends BaseReminderControllerTest {
 
     private final int TOTAL_ELEMENTS = 25;
     private final int PAGE_SIZE = 10;
+    private final int DEFAULT_PAGE_SIZE = 20;
     private final int EXPECTED_PAGES = 3;
     private final int LAST_PAGE_SIZE = 5;
 
@@ -70,6 +71,15 @@ public class GetPageReminderControllerTest extends BaseReminderControllerTest {
                 .andExpect(jsonPath("$.totalPages").value(EXPECTED_PAGES))
                 .andExpect(jsonPath("$.size").value(PAGE_SIZE))
                 .andExpect(jsonPath("$.page").value(THIRD_PAGE_NUMBER));
+    }
+
+    @Test
+    void shouldDefaultParams() throws Exception {
+        mockMvc.perform(get(GET_REMINDER_LIST_URL)
+                        .with(user()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(DEFAULT_PAGE_SIZE))
+                .andExpect(jsonPath("$.page").value(FIRST_PAGE_NUMBER));
     }
 
     @Test
