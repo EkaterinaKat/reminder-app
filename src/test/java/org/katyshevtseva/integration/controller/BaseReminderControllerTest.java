@@ -41,6 +41,7 @@ public class BaseReminderControllerTest {
     protected static final String UPDATE_REMINDER_URL = "/reminder";
     protected static final String GET_REMINDER_LIST_URL = "/reminder";
     protected static final String GET_SORTED_REMINDER_LIST_URL = "/reminder/sort";
+    protected static final String GET_FILTERED_REMINDER_LIST_URL = "/reminder/filter";
 
     protected final String BLANK_STRING = "   ";
     protected final String ID_PARAM = "id";

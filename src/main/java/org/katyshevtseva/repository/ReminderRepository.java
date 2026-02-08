@@ -29,7 +29,7 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     List<Reminder> findByUserProfileIdOrderByTitle(String userId);
 
     @Query(value = "SELECT * FROM reminder r WHERE r.user_id = :userId " +
-            "AND (CAST(:date AS date) IS NULL OR DATE(r.remind) = :date) "
+            "AND (CAST(:date AS date) IS NULL OR CAST(r.remind AS date) = :date) "
             + "AND (CAST(:time AS time) IS NULL OR CAST(r.remind AS time) = :time)",
             nativeQuery = true)
     List<Reminder> findFilteredReminders(
