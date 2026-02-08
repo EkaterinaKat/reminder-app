@@ -1,4 +1,4 @@
-package org.katyshevtseva.integration.controller;
+package org.katyshevtseva.integration.controller.reminder;
 
 import com.katyshevtseva.dto.ReminderRequestDto;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CreateReminderControllerTest extends BaseReminderControllerTest {
 
     @Test
-    void shouldCreateReminderAndReturnFullDto() throws Exception {
+    void shouldSaveReminderAndReturnFullDto() throws Exception {
         ReminderRequestDto dto = new ReminderRequestDto(TITLE, DATE_TIME);
         dto.setDescription(DESCRIPTION);
 

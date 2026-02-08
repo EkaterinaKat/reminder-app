@@ -1,4 +1,4 @@
-package org.katyshevtseva.integration.controller;
+package org.katyshevtseva.integration.controller.reminder;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;

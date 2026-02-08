@@ -1,4 +1,4 @@
-package org.katyshevtseva.integration.controller;
+package org.katyshevtseva.integration.controller.reminder;
 
 import org.junit.jupiter.api.Test;
 import org.katyshevtseva.entity.Reminder;
