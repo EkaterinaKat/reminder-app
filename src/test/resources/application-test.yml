@@ -6,3 +6,11 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
+
+reminder:
+  send:
+    interval-ms: 2000
+
+security:
+  oauth2:
+    token:

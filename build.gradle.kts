@@ -32,6 +32,12 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("com.h2database:h2")
+
+    testImplementation("io.rest-assured:rest-assured:5.3.2")
+    testImplementation("io.rest-assured:json-path:5.3.2")
+    testImplementation("com.icegreen:greenmail-spring:2.0.1")
+    testImplementation("org.awaitility:awaitility:4.2.0")
+    testImplementation("com.icegreen:greenmail-junit5:2.0.1")
 }
 
 openApiGenerate {
