@@ -1,4 +1,4 @@
-package org.katyshevtseva.integration.controller;
+package org.katyshevtseva.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +6,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +19,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class BaseTest {
+public class BaseIntegrationTest {
 
     @Autowired
     protected MockMvc mockMvc;
@@ -37,5 +39,13 @@ public class BaseTest {
 
     protected RequestPostProcessor otherUser() {
         return jwt().jwt(jwt -> jwt.claim(CLAIM_SUB, USER_ID_2));
+    }
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () -> "jdbc:h2:mem:test_db");
+        registry.add("spring.datasource.driver-class-name", () -> "org.h2.Driver");
+        registry.add("spring.jpa.database-platform", () -> "org.hibernate.dialect.H2Dialect");
+        registry.add("spring.jpa.hibername.ddl-auto", () -> "create-drop");
     }
 }

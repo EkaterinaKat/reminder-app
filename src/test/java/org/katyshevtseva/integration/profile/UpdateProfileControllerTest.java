@@ -1,4 +1,4 @@
-package org.katyshevtseva.integration.controller.profile;
+package org.katyshevtseva.integration.profile;
 
 import com.katyshevtseva.dto.UpdateProfileRequestDto;
 import org.junit.jupiter.api.Test;

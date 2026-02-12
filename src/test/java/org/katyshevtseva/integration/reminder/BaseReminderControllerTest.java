@@ -1,8 +1,8 @@
-package org.katyshevtseva.integration.controller.reminder;
+package org.katyshevtseva.integration.reminder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.katyshevtseva.dto.ReminderRequestDto;
-import org.katyshevtseva.integration.controller.BaseTest;
+import org.katyshevtseva.integration.BaseIntegrationTest;
 import org.katyshevtseva.repository.ReminderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-public class BaseReminderControllerTest extends BaseTest {
+public class BaseReminderControllerTest extends BaseIntegrationTest {
 
     @Autowired
     protected ReminderRepository reminderRepository;

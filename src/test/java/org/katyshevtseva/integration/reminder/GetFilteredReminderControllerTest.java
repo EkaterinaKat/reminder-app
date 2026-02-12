@@ -1,4 +1,4 @@
-package org.katyshevtseva.integration.controller.reminder;
+package org.katyshevtseva.integration.reminder;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.katyshevtseva.dto.ReminderDto;

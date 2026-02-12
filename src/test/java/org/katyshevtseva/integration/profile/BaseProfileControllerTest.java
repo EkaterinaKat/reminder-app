@@ -1,7 +1,7 @@
-package org.katyshevtseva.integration.controller.profile;
+package org.katyshevtseva.integration.profile;
 
 import com.katyshevtseva.dto.UpdateProfileRequestDto;
-import org.katyshevtseva.integration.controller.BaseTest;
+import org.katyshevtseva.integration.BaseIntegrationTest;
 import org.katyshevtseva.repository.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 
-public class BaseProfileControllerTest extends BaseTest {
+public class BaseProfileControllerTest extends BaseIntegrationTest {
 
     @Autowired
     protected UserProfileRepository profileRepository;

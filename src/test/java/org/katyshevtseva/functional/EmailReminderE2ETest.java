@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.katyshevtseva.util.Utils.normalizeWhitespace;
 
-public class EmailReminderE2ETest extends BaseReminderE2ETest {
+public class EmailReminderE2ETest extends BaseE2ETest {
 
     private static final String GREEN_MAIL_USERNAME = "test@mail.ru";
     private static final String GREEN_MAIL_PASSWORD = "test";
@@ -79,4 +79,17 @@ public class EmailReminderE2ETest extends BaseReminderE2ETest {
                 .during(9, SECONDS)
                 .until(() -> greenMail.getReceivedMessages().length == 0);
     }
+
+    @Test
+    void shouldNotSendEmailWhenEmailNotSpecified() {
+        deleteProfile();
+        createReminder(TITLE, DESCRIPTION, LocalDateTime.now().plusSeconds(3));
+
+        await()
+                .alias("Email should not be sent if email not specified")
+                .atMost(10, SECONDS)
+                .during(9, SECONDS)
+                .until(() -> greenMail.getReceivedMessages().length == 0);
+    }
+
 }

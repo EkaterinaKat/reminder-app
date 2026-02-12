@@ -38,6 +38,10 @@ dependencies {
     testImplementation("com.icegreen:greenmail-spring:2.0.1")
     testImplementation("org.awaitility:awaitility:4.2.0")
     testImplementation("com.icegreen:greenmail-junit5:2.0.1")
+
+    testImplementation("org.testcontainers:testcontainers:2.0.3")
+    testImplementation("org.testcontainers:testcontainers-postgresql:2.0.3")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.3")
 }
 
 openApiGenerate {

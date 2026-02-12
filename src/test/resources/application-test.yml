@@ -1,12 +1,3 @@
-spring:
-  datasource:
-    url: jdbc:h2:mem:test_db
-    driver-class-name: org.h2.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
-
 reminder:
   send:
     interval-ms: 2000
