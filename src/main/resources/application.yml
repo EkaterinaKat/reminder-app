@@ -1,0 +1,57 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+reminder:
+  send:
+    interval-ms: 60000
+
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN}
+    username: reminder1417_bot
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/reminder_app_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+  task:
+    execution:
+      pool:
+        size: 5
+    scheduling:
+      thread-name-prefix: "remind-task-"
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: reminder1417@gmail.com
+    password: gmmx upyz ffxz hmkf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+message:
+  telegram:
+    welcome: Добро пожаловать %s! Ваши напоминания будут приходить в этот чат.
+    error: Произошла ошибка при запуске бота.

@@ -1,0 +1,268 @@
+openapi: 3.0.0
+info:
+  title: Reminder API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /profile:
+    put:
+      tags:
+        - profile
+      operationId: updateProfile
+      summary: Update user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequestDto'
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileDto'
+    get:
+      tags:
+        - profile
+      operationId: getProfile
+      summary: Get user profile
+      responses:
+        '200':
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileDto'
+    delete:
+      tags:
+        - profile
+      operationId: deleteProfile
+      summary: Delete user profile
+      responses:
+        '200':
+          description: Deleted
+
+  /reminder:
+    post:
+      tags:
+        - reminder
+      operationId: createReminder
+      summary: Create reminder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderRequestDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderDto'
+    put:
+      tags:
+        - reminder
+      operationId: updateReminder
+      summary: Update reminder
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReminderRequestDto'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReminderDto'
+    delete:
+      tags:
+        - reminder
+      operationId: deleteReminder
+      summary: Delete reminder
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Deleted
+    get:
+      tags:
+        - reminder
+      operationId: getReminderPage
+      summary: Get reminder page
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы (по умолчанию 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: size
+          in: query
+          description: Размер страницы (по умолчанию 20)
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Reminder page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageReminderDto'
+  /reminder/sort:
+    get:
+      tags:
+        - reminder
+      operationId: getSortedList
+      summary: Get sorted reminders
+      parameters:
+        - name: sortType
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ title, date, time ]
+      responses:
+        '200':
+          description: Sorted list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReminderDto'
+  /reminder/filter:
+    get:
+      tags:
+        - reminder
+      operationId: getFilteredList
+      summary: Get filtered reminders
+      description: At least one parameter is required for filtering
+      parameters:
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2026-01-26'
+        - name: time
+          in: query
+          required: false
+          schema:
+            type: string
+            pattern: '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$'
+            example: '14:30:00'
+      responses:
+        '200':
+          description: Filtered list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReminderDto'
+
+components:
+  schemas:
+    UserProfileDto:
+      type: object
+      required:
+        - userId
+      properties:
+        userId:
+          type: string
+        email:
+          type: string
+          format: email
+          example: "string@mail.ru"
+        telegram:
+          type: string
+          example: "username"
+    UpdateProfileRequestDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "string@mail.ru"
+        telegram:
+          type: string
+          example: "username"
+    ReminderRequestDto:
+      type: object
+      required:
+        - title
+        - remind
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        remind:
+          type: string
+          format: date-time
+          example: "2026-01-25T16:50:00Z"
+    ReminderDto:
+      type: object
+      required:
+        - id
+        - title
+        - remind
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        remind:
+          type: string
+          format: date-time
+          example: "2026-01-25T16:50:00Z"
+        telegramStatus:
+          type: string
+        emailStatus:
+          type: string
+    PageReminderDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReminderDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        size:
+          type: integer
+        page:
+          type: integer

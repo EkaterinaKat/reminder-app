@@ -1,0 +1,7 @@
+reminder:
+  send:
+    interval-ms: 2000
+
+security:
+  oauth2:
+    token:

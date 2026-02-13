@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-initial.yaml
+  - include:
+      file: db/changelog/002-create-profile-table.yaml
+  - include:
+      file: db/changelog/003-add-profile-fk-to-reminder.yaml
+  - include:
+      file: db/changelog/004-add-reminder-status.yaml
+  - include:
+      file: db/changelog/005-user-telegram-info.yaml
+  - include:
+      file: db/changelog/006-add-second-reminder-status.yaml

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: me
+      changes:
+        - renameColumn:
+            tableName: reminder
+            oldColumnName: status
+            newColumnName: telegram_status
+            columnDataType: VARCHAR(30)
+        - addColumn:
+            tableName: reminder
+            columns:
+              - column:
+                  name: email_status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
